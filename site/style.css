@@ -465,6 +465,15 @@ a.project-item:focus-visible {
   margin-bottom: var(--space-sm);
 }
 
+.project-item h3 a {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.project-item h3 a:hover {
+  color: var(--color-accent);
+}
+
 .project-item p {
   font-size: 0.9375rem;
   color: var(--color-text-secondary);
