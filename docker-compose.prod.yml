@@ -1,0 +1,28 @@
+services:
+  lucacioria:
+    image: nginx:alpine
+    container_name: lucacioria
+    restart: unless-stopped
+    volumes:
+      - ./site:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - web
+    labels:
+      - traefik.enable=true
+      # Main domain: lucacioria.com
+      - traefik.http.routers.lucacioria.rule=Host(`lucacioria.com`)
+      - traefik.http.routers.lucacioria.entrypoints=websecure
+      - traefik.http.routers.lucacioria.tls.certresolver=letsencrypt
+      # WWW redirect: www.lucacioria.com -> lucacioria.com
+      - traefik.http.routers.lucacioria-www.rule=Host(`www.lucacioria.com`)
+      - traefik.http.routers.lucacioria-www.entrypoints=websecure
+      - traefik.http.routers.lucacioria-www.tls.certresolver=letsencrypt
+      - traefik.http.routers.lucacioria-www.middlewares=www-redirect
+      - traefik.http.middlewares.www-redirect.redirectregex.regex=^https://www\.lucacioria\.com/(.*)
+      - traefik.http.middlewares.www-redirect.redirectregex.replacement=https://lucacioria.com/$${1}
+      - traefik.http.middlewares.www-redirect.redirectregex.permanent=true
+
+networks:
+  web:
+    external: true
