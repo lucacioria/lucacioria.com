@@ -24,4 +24,7 @@ else
   docker exec lucacioria wget -qO- http://localhost/ > /dev/null && echo "   Container is serving content correctly" || echo "   Container check failed"
 fi
 
+echo "-> Cleaning up old images..."
+docker image prune -f
+
 echo "=== Deploy complete ==="
